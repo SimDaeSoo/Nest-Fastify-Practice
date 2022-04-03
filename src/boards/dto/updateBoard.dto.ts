@@ -1,13 +1,18 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsByteLength, IsEnum, IsOptional, IsString } from 'class-validator';
 import { BOARD_STATUS } from 'interfaces';
 
 export class UpdateBoardDTO {
-  @IsNotEmpty()
-  public title?: string;
+  @IsOptional()
+  @IsString()
+  @IsByteLength(0, 256)
+  public title: string;
 
-  @IsNotEmpty()
+  @IsOptional()
+  @IsString()
+  @IsByteLength(0, 256)
   public description?: string;
 
-  @IsNotEmpty()
-  public status?: BOARD_STATUS;
+  @IsOptional()
+  @IsEnum(BOARD_STATUS)
+  public status: BOARD_STATUS;
 }

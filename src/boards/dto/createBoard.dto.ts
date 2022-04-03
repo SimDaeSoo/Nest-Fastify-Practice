@@ -1,4 +1,11 @@
-import { IsInt, IsNotEmpty } from 'class-validator';
+import {
+  IsByteLength,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { BOARD_STATUS } from 'interfaces';
 
 export class CreateBoardDTO {
@@ -7,9 +14,15 @@ export class CreateBoardDTO {
   id: number;
 
   @IsNotEmpty()
+  @IsString()
+  @IsByteLength(0, 256)
   public title: string;
 
-  @IsNotEmpty()
-  public description: string;
+  @IsOptional()
+  @IsString()
+  @IsByteLength(0, 256)
+  public description = '';
+
+  @IsEnum(BOARD_STATUS)
   public status: BOARD_STATUS = BOARD_STATUS.PUBLIC;
 }
