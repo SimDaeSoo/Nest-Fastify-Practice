@@ -1,9 +1,9 @@
 export enum BOARD_STATUS {
-  PUBLIC,
-  PRIVATE,
+  PUBLIC = 'PUBLIC',
+  PRIVATE = 'PRIVATE',
 }
 
-export interface Board {
+export class Board {
   id: number;
   title: string;
   description: string;

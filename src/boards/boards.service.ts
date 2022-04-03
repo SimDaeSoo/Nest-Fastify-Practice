@@ -1,25 +1,52 @@
-import { Injectable } from '@nestjs/common';
-import { Board, BOARD_STATUS } from './board.model';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Board } from '../../interfaces';
+import { CreateBoardDTO } from './dto/createBoard.dto';
+import { UpdateBoardDTO } from './dto/updateBoard.dto';
 
 @Injectable()
 export class BoardsService {
-  private boards: Array<Board> = [];
+  private id = 0;
+  private boards: Record<number, Board> = {};
 
   public findMany(): Array<Board> {
-    return this.boards;
+    return Object.keys(this.boards).map((key) => this.boards[key]);
   }
 
-  public create(board: Partial<Board>): Board {
-    const createdBoard: Board = {
-      id: this.boards.length,
-      title: '',
-      description: '',
-      status: BOARD_STATUS.PUBLIC,
-      ...board,
-    };
+  public findOne(id: number): Board {
+    if (!this.boards[id]) {
+      throw new NotFoundException();
+    } else {
+      return this.boards[id];
+    }
+  }
 
-    this.boards.push(createdBoard);
+  public delete(id: number): Board {
+    if (!this.boards[id]) {
+      throw new NotFoundException();
+    } else {
+      const deletedBoard: Board = this.boards[id];
 
-    return createdBoard;
+      delete this.boards[id];
+
+      return deletedBoard;
+    }
+  }
+
+  public create(createBoardData: CreateBoardDTO): Board {
+    this.boards[createBoardData.id] = createBoardData;
+
+    return createBoardData;
+  }
+
+  public update(id: number, updateBoardData: UpdateBoardDTO): Board {
+    if (!this.boards[id]) {
+      throw new NotFoundException();
+    } else {
+      for (const key in updateBoardData) {
+        this.boards[id][key] = updateBoardData[key];
+      }
+
+      return this.boards[id];
+    }
   }
 }
