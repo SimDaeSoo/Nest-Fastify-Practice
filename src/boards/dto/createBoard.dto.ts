@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsByteLength,
   IsEnum,
@@ -21,6 +22,9 @@ export class CreateBoardDTO {
   @IsOptional()
   @IsString()
   @IsByteLength(0, 256)
+  @Transform(({ value }) => {
+    return `${value} + Transformed`;
+  })
   public description = '';
 
   @IsEnum(BOARD_STATUS)

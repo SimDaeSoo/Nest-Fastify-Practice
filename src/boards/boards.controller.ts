@@ -33,13 +33,24 @@ export class BoardsController {
   }
 
   @Post()
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  )
   public create(@Body() createBoardData: CreateBoardDTO): Board {
     return this.boardsService.create(createBoardData);
   }
 
   @Put(':id')
-  @UsePipes(ValidationPipe)
+  @UsePipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  )
   public update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateBoardData: UpdateBoardDTO,
